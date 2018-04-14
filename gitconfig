@@ -9,7 +9,8 @@
 	whitespace=fix,-indent-with-non-tab,trailing-space,cr-at-eol
 [user]
 	name = Mathieu Lemay
-	email = acidrain1@gmail.com
+	email = mathieu.lemay@broadsign.com
+	signingkey = 0xCD614E6AAC09AC9B
 [commit]
 	gpgsign = true
 [alias]
