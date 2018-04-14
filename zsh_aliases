@@ -2,7 +2,6 @@ alias sudo='sudo '  # Enable aliases when using sudo
 alias exec='exec '  # Enable aliases when using exec
 
 # ls aliases
-alias ls='ls --color=auto -v --group-directories-first'
 alias ll='ls -lh'
 alias la='ls -A'
 alias lf='ls -lhA'
@@ -29,17 +28,25 @@ alias dd='dd status=progress'
 alias rar='unrar'
 alias rf='readlink -f'
 
-if installed trizen; then
-    alias up='trizen -Syu'
-    alias pm='trizen'
-elif installed pacaur; then
-    alias up='pacaur -Syu'
-    alias pm='pacaur'
-elif installed pacman; then
-    alias up='sudo pacman -Syu'
-    alias pm='pacman'
-elif installed apt; then
-    alias up='sudo apt update && sudo apt full-upgrade'
+if installed brew; then
+    alias pm='brew'
+    alias up='brew upgrade'
+fi
+
+UTILS=(
+    'mkdir'
+    'readlink'
+    'shred'
+)
+
+# Replace utils by their gnu coreutils counterparts
+if installed gls; then
+    alias ls='gls --color=auto -v --group-directories-first'
+    for i in ${UTILS[@]}; do
+        alias $i="g$i"
+    done
+else
+    alias ls='ls -G'
 fi
 
 if installed nvim; then

@@ -49,6 +49,11 @@ bindkey "^[[A" history-search-backward
 bindkey "^[[B" history-search-forward
 bindkey "^W" backward-kill-word
 bindkey "^R" history-incremental-search-backward
+bindkey "^[[1;5D" backward-word
+bindkey "^[[1;5C" forward-word
+bindkey "^[[1~" beginning-of-line
+bindkey "^[[4~" end-of-line
+bindkey '^[[3~' delete-char
 
 HISTFILE=~/.zsh_history
 HISTSIZE=5000
@@ -91,8 +96,8 @@ PS1="${PS1}${COLOR_RESET}:${FG_BRIGHT_BLUE}%1~${COLOR_RESET}%(!.#.$) "
 PS2='> '
 RPROMPT=$'$(vcs_info_wrapper)'"%(1j.[%jbg].)[%D{%T}]%(?.${FG_BRIGHT_GREEN}.${FG_BRIGHT_RED})[%?]${COLOR_RESET}"
 
-if installed dircolors; then
-    [ -r ~/.dircolors ] && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
+if installed gdircolors; then
+    [ -r ~/.dircolors ] && eval "$(gdircolors -b ~/.dircolors)" || eval "$(gdircolors -b)"
 fi
 
 # SSH Agent
@@ -102,8 +107,8 @@ ssh-add -l > /dev/null || ssh-add
 
 [[ -f ~/.zsh_aliases ]] && . ~/.zsh_aliases
 [[ -f ~/.zsh_functions ]] && . ~/.zsh_functions
-[[ -f /usr/bin/virtualenvwrapper_lazy.sh ]] && . /usr/bin/virtualenvwrapper_lazy.sh
-[[ -f /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]] && . /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+[[ -f /usr/local/bin/virtualenvwrapper_lazy.sh ]] && . /usr/local/bin/virtualenvwrapper_lazy.sh
+[[ -f /usr/local/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]] && . /usr/local/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 [[ -f /usr/share/doc/pkgfile/command-not-found.zsh ]] && . /usr/share/doc/pkgfile/command-not-found.zsh
 
 # Load local stuff
@@ -119,15 +124,14 @@ export PAGER="less"
 export MEDIA="/run/media/$USER"
 
 # Setup FZF
-if [[ -d /usr/share/fzf ]]; then
-    . /usr/share/fzf/key-bindings.zsh
-    . /usr/share/fzf/completion.zsh
+if [[ -f ~/.fzf.zsh ]]; then
+    . ~/.fzf.zsh
 
     # Show prompt on top
     export FZF_DEFAULT_OPTS='--reverse'
     # --files: List files that would be searched but do not search
     # --follow: Follow symlinks
-    export FZF_DEFAULT_COMMAND='rg --files --follow 2>/dev/null'
+    export FZF_DEFAULT_COMMAND='rg --files --follow --glob '\''!Library/*'\'' 2>/dev/null'
     export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 fi
 

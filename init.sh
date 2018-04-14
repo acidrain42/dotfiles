@@ -30,10 +30,15 @@ APPS=(
     'fzf'
     'rg'
     'tmux'
-    'xsel'
 )
 
-DOTFILES_DIR="$(readlink -f "$(dirname "${BASH_SOURCE[0]}")")"
+function get_real_path() {
+    if type greadlink &> /dev/null; then
+        greadlink -f "$0"
+    else
+        perl -e 'use Cwd "abs_path"; print abs_path(shift)' "$1"
+    fi
+}
 
 function installed() {
     type "$1" &> /dev/null
@@ -46,6 +51,8 @@ function create_link() {
 
     ln -s "$2" "$1"
 }
+
+DOTFILES_DIR="$(dirname "$(get_real_path "${BASH_SOURCE[0]}")")"
 
 [[ -d "$HOME/.config" ]] || mkdir "$HOME/.config"
 [[ -d "$HOME/usr/bin" ]] || mkdir -p "$HOME/usr/bin"
@@ -67,7 +74,9 @@ for file in $DOTFILES_DIR/usr/lib/*; do
     create_link "$HOME/usr/lib/$(basename "$file")" "$file"
 done
 
-find "$HOME/usr" -xtype l -print0 | xargs --no-run-if-empty -0 rm
+if find "$HOME/usr" -xtype l &> /dev/null; then
+    find "$HOME/usr" -xtype l -print0 | xargs -0 rm
+fi
 
 [[ -e "$DOTFILES_DIR/zsh.$(hostname)" ]] && ln -sf "$DOTFILES_DIR/zsh.$(hostname)" "$HOME/.zsh.local"
 
@@ -84,15 +93,6 @@ if installed vim; then
         TERM=xterm vim +PlugInstall +qall
     fi
 fi
-
-# Regenerate screen and screen-256color terminfo to fix C-h problem with neovim
-# https://github.com/christoomey/vim-tmux-navigator/issues/71
-TERMS=( 'screen' 'screen-256color' 'tmux' 'tmux-256color' )
-for term in "${TERMS[@]}"; do
-    infocmp "$term" | sed 's/kbs=^[hH]/kbs=\\177/' > "${term}.ti"
-    tic "${term}.ti"
-    rm "${term}.ti"
-done
 
 installed crontab && crontab "$DOTFILES_DIR/crontab"
 
