@@ -156,6 +156,18 @@ export GOPATH="$HOME/usr/go"
 export CARGO_HOME="$HOME/usr/cargo"
 [[ -d "$CARGO_HOME/bin" ]] && export PATH="$CARGO_HOME/bin:$PATH"
 
+# Brew Kegs Paths
+export PATH="/usr/local/opt/node@8/bin:$PATH"
+export CMAKE_PREFIX_PATH="/usr/local/opt/qt:$CMAKE_PREFIX_PATH"
+
+# MacPorts
+if [ -d /opt/local ]; then
+    export PATH="/opt/local/sbin:/opt/local/bin:$PATH"
+fi
+
+# Use Python3 for virtualenvwrapper
+export VIRTUALENVWRAPPER_PYTHON=/usr/local/bin/python3
+
 ANDROID_HOME="$HOME/Android/Sdk"
 if [ -d "$ANDROID_HOME" ]; then
     export ANDROID_HOME
