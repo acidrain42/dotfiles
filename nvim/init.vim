@@ -16,6 +16,7 @@ Plug 'junegunn/vim-slash'
 Plug 'junegunn/vim-easy-align'
 Plug 'easymotion/vim-easymotion'
 Plug 'junegunn/fzf'
+Plug 'lifepillar/pgsql.vim'
 
 if has('nvim') || (v:version >= 800)
     Plug 'w0rp/ale'
@@ -138,6 +139,7 @@ endif
 syntax enable
 au BufNewFile,BufRead *.bf set filetype=brainfuck
 au BufNewFile,BufRead *.asm set filetype=nasm
+let g:sql_type_default = 'pgsql'
 
 " Disable stuff that slow down vim when working with big files
 function! DisableStuffForBigFiles()
