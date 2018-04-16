@@ -65,5 +65,10 @@ elif [ "${_status}" = "stopped" ]; then
     BODY="Stopped"
 fi
 
-debug "notify-send --hint=int:transient:1 --icon '${COVER:-applications-multimedia}' '${TITLE}' '${BODY}'"
-notify-send --hint=int:transient:1 --icon "${COVER:-applications-multimedia}" "${TITLE}" "${BODY}"
+if [ -n "$COVER" ]; then
+    EXTRAARGS="-appIcon ${COVER}"
+fi
+
+debug "terminal-notifier -group cmus -title '${TITLE}' -message '${BODY}' ${EXTRAARGS:-}"
+# shellcheck disable=SC2086
+terminal-notifier -group cmus -title "${TITLE}" -message "${BODY}" ${EXTRAARGS:-}

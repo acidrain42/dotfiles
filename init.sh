@@ -29,6 +29,7 @@ CONFIG_FILES=(
 APPS=(
     'fzf'
     'rg'
+    'terminal-notifier'
     'tmux'
 )
 
