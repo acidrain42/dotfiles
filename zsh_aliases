@@ -38,6 +38,7 @@ UTILS=(
     'mkdir'
     'readlink'
     'shred'
+    'tail'
 )
 
 # Replace utils by their gnu coreutils counterparts
