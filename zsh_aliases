@@ -27,6 +27,7 @@ alias hd='hexdump -C'
 alias dd='dd status=progress'
 alias rar='unrar'
 alias rf='readlink -f'
+alias f='open .'
 
 if installed brew; then
     alias pm='brew'
@@ -37,6 +38,7 @@ UTILS=(
     'mkdir'
     'readlink'
     'shred'
+    'tail'
 )
 
 # Replace utils by their gnu coreutils counterparts
@@ -52,13 +54,6 @@ fi
 if installed nvim; then
     alias vim='nvim'
     alias vimdiff='nvim -d'
-fi
-
-if installed thunar; then
-    alias f='thunar'
-    alias td='(thunar --daemon &>/dev/null &)'
-elif installed nautilus; then
-    alias f='(nautilus . &> /dev/null &)'
 fi
 
 if installed colordiff; then
