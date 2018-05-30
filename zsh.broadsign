@@ -1,5 +1,3 @@
-hash -d st=$HOME/src/st
-hash -d sync=$HOME/src/st_sync
 hash -d db=$HOME/broadsign/db_backups
 
 export ACIDRAIN_MOUNT="$HOME/usr/mnt/acidrain"
@@ -7,19 +5,28 @@ alias acidrainmount="sshfs acidrain.duckdns.org:/srv/data $ACIDRAIN_MOUNT"
 alias acidrainumount="fusermount -u $ACIDRAIN_MOUNT"
 
 alias pglogs='docker logs postgres -f --tail=10'
-
-alias sqllocal='pgcli -h localhost -U postgres -d bs_sales'
-alias sqlqa='pgcli -h localhost -p 54321 -U st_db -d stdb01'
-alias sqlmasterqa='pgcli -h localhost -p 54322 -U sd_user -d sddb'
-alias sqlbeta='pgcli -h localhost -p 54323 -U sd_user -d sddb'
 alias sqlvim="vim -c 'split | wincmd j | terminal' $HOME/broadsign/scratch.sql"
 
-alias tunqa='ssh -L54321:qa-bs-us-east-1-sso-pg1.cbcqvvyhz8cc.us-east-1.rds.amazonaws.com:5432 aws-qa-st01 -N'
-alias tunmasterqa='ssh -L54322:qa-bs-canada-central-1-sd4-db01.ckr0t9mkdvyb.ca-central-1.rds.amazonaws.com:5432 masterqa-stsync01 -N'
-alias tunbeta='ssh -L54323:betadirectdb01.cezdtltl6uq9.ca-central-1.rds.amazonaws.com:5432 beta-node01 -N'
+# Local
+alias sqllocal='pgcli -h localhost -U postgres -d bs_sales'
 
-alias gv='pushd ~st/app; npm i; grunt verify; popd'
-alias yd='pushd ~st/app; yarn install; yarn build:dev; popd'
+# QA
+alias tunqa='echo "Opening tunnel to QA on port 54321"; ssh -L54321:qa-bs-us-east-1-sso-pg1.cbcqvvyhz8cc.us-east-1.rds.amazonaws.com:5432 aws-qa-st01 -N'
+alias sqlqa='pgcli -h localhost -p 54321 -U st_db -d stdb01'
+
+# MasterQA
+alias tunmasterqa='echo "Opening tunnel to MasterQA on port 54322"; ssh -L54322:qa-bs-canada-central-1-sd4-db01.ckr0t9mkdvyb.ca-central-1.rds.amazonaws.com:5432 masterqa-stsync01 -N'
+alias sqlmasterqa='pgcli -h localhost -p 54322 -U sd_user -d sddb'
+
+# Beta
+alias tunbeta='echo "Opening tunnel to Beta on port 54323"; ssh -L54323:betadirectdb01.cezdtltl6uq9.ca-central-1.rds.amazonaws.com:5432 beta-node01 -N'
+alias sqlbeta='pgcli -h localhost -p 54323 -U sd_user -d sddb'
+
+# Prod
+alias tunprod='echo "Opening tunnel to Prod on port 54324"; ssh -L54324:pr-bs-canada-central-1-sd-db01.ckr0t9mkdvyb.ca-central-1.rds.amazonaws.com:5432 prod-node01 -N'
+alias sqlprod='pgcli -h localhost -p 54324 -U sd_user -d sddb'
+
+alias gv='pushd ~/src/st/app; npm i; grunt verify; popd'
 
 if [ -e /usr/share/nvm/init-nvm.sh ]; then
     function nvm {
@@ -31,7 +38,7 @@ fi
 
 function acidrain() {
     while true; do
-        ssh -D 1080 -R 1222:localhost:22 -R 11194:localhost:1194 $@ acidrain.duckdns.org
+        ssh $@ acidrain.duckdns.org
         [ $? -eq 255 ] || break
         sleep 5
     done
@@ -39,3 +46,24 @@ function acidrain() {
 
 # 💩JS
 export PATH="./node_modules/.bin:$PATH"
+
+if [ -e  "/usr/local/opt/nvm/nvm.sh" ]; then
+    function nvm() {
+        unset -f nvm
+        export NVM_DIR="$HOME/.nvm"
+        source "/usr/local/opt/nvm/nvm.sh"
+
+        nvm $*
+    }
+fi
+
+function yd() {
+    pushd ~/src/st/app
+    [[ "$(node -v | cut -d . -f 1)" != "v8" ]] && nvm use lts/carbon
+    yarn install
+    yarn build:dev
+    nvm use system
+    popd
+
+    terminal-notifier -group yarn -title "Yarn" -message "Build complete" > /dev/null
+}
