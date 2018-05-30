@@ -1,74 +1,115 @@
-#! /bin/bash
+#! /usr/bin/env python3
 
-# shellcheck disable=SC2154
-# SC2154: var is referenced but not assigned.
+import os
+import sys
+import subprocess
 
-NOW="$(date "+%Y-%m-%d %H:%M:%S")"
+from datetime import datetime, timedelta
 
-DEBUG=0
-function debug() {
-    [[ $DEBUG -ne 0 ]] && echo "$NOW [cmus-notify] $*" >> ~/debug.log
-}
 
-function format_track() {
-    if [ -n "$1" ]; then
-        echo "disc $1, track $2"
-    else
-        echo "track $2"
-    fi
-}
+timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+debug = False
 
-function format_time() {
-    h=$(($1 / 3600))
-    m=$(($1 % 3600))
 
-    d=""
-    [[ $h -gt 0 ]] && d=$(printf '%02d' "$h")
-
-    echo "$d$(printf '%02d:%02d' $((m / 60)) $((m % 60)))"
-}
-
-function format_position() {
-    if [ -z "$1" ] || [ -z "$2" ]; then
+def debug_print(*args):
+    if not debug:
         return
-    fi
 
-    echo "$(format_time "$1") / $(format_time "$2")"
-}
+    with open(os.path.expanduser('~/debug.log'), 'a') as f:
+        f.write('%s [cmus-notify] %s\n' % (timestamp, ' '.join(args)))
 
-function get_cover() {
-    [[ -z "${_file}" ]] && return
 
-    dir=$(dirname "${_file}")
+def format_track(m):
+    if m.discnumber:
+        return 'disc %s, track %s' % (m.discnumber, m.tracknumber)
+    else:
+        return 'track %s' % m.tracknumber
 
-    find "$dir" -name "cover.*"
-}
 
-while [ $# -gt 0 ]; do
-    debug "_$1='$2'"
-    eval "_$1='${2//\'/\'\\\'\'}'"
-    shift 2
-done
+def format_time(sec):
+    if type(sec) == str:
+        sec = int(sec)
 
-COVER=$(get_cover)
-POSTITION=$(format_position "$_position" "$_duration")
+    sec_str = str(timedelta(seconds=sec))
 
-if [ "${_status}" = "playing" ]; then
-    TITLE="${_artist} - ${_title}"
-    BODY="${_album} $(format_track "${_discnumber}" "${_tracknumber}")"
-    [[ -n "$POSTITION" ]] && BODY="$BODY\\n$POSTITION"
-elif [ "${_status}" = "paused" ]; then
-    TITLE="C* Music Player"
-    BODY="Paused"
-elif [ "${_status}" = "stopped" ]; then
-    TITLE="C* Music Player"
-    BODY="Stopped"
-fi
+    return sec_str[2:] if sec < 3600 else sec_str.zfill(8)
 
-if [ -n "$COVER" ]; then
-    EXTRAARGS="-appIcon ${COVER}"
-fi
 
-debug "terminal-notifier -group cmus -title '${TITLE}' -message '${BODY}' ${EXTRAARGS:-}"
-# shellcheck disable=SC2086
-terminal-notifier -group cmus -title "${TITLE}" -message "${BODY}" ${EXTRAARGS:-}
+def format_position(m):
+    if not m.duration:
+        return None
+
+    if m.position:
+        return '%s / %s' % (format_time(m.position), format_time(m.duration))
+    else:
+        return format_time(m.duration)
+
+
+def get_cover(m):
+    if not m.file:
+        return None
+
+    album_dir = os.path.dirname(m.file)
+
+    return next((os.path.join(album_dir, f) for f in os.listdir(album_dir) if f.startswith('cover.')), None)
+
+class Metadata:
+    def __init__(self):
+        self.file = None
+        self.artist = None
+        self.album = None
+        self.title = None
+        self.tracknumber = None
+        self.discnumber = None
+        self.date = None
+        self.duration = None
+        self.position = None
+        self.status = None
+        self.cover = None
+
+
+def extract_metadata(argv):
+    m = Metadata()
+    for i in range(len(argv) // 2):
+        k = argv[i * 2]
+        v = argv[i * 2 + 1]
+        setattr(m, k, v)
+
+    return m
+
+
+def main():
+    if len(sys.argv) > 1 and sys.argv[1] == '-d':
+        global debug
+        debug = True
+        del sys.argv[1]
+
+    debug_print(*sys.argv[1:])
+
+    m = extract_metadata(sys.argv[1:])
+
+    if m.status == 'playing':
+        title = '%s - %s' % (m.artist, m.title)
+        body = '%s %s' % (m.album, format_track(m))
+        position = format_position(m)
+        if position:
+            body += '\n' + position
+    elif m.status == 'paused':
+        title="C* Music Player"
+        body="Paused"
+    elif m.status == 'stopped':
+        title="C* Music Player"
+        body="Stopped"
+
+    args = ['terminal-notifier', '-group', 'cmus', '-title', title, '-message', body]
+
+    cover = get_cover(m)
+    if cover:
+        args += ['-appIcon', cover]
+
+    debug_print(' '.join(args))
+    subprocess.run(args)
+
+
+if __name__ == '__main__':
+    main()
