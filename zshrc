@@ -13,7 +13,7 @@ fi
 autoload -U compinit promptinit colors
 autoload -Uz vcs_info
 
-compinit
+compinit -i
 promptinit
 colors
 
@@ -61,6 +61,8 @@ SAVEHIST=5000
 
 # Add completion for cd ..
 zstyle ':completion:*' special-dirs true
+# Case insensitive completion
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
 
 # Version Control System
 zstyle ':vcs_info:*' actionformats \
@@ -157,13 +159,10 @@ export CARGO_HOME="$HOME/usr/cargo"
 [[ -d "$CARGO_HOME/bin" ]] && export PATH="$CARGO_HOME/bin:$PATH"
 
 # Brew Kegs Paths
-export PATH="/usr/local/opt/node@8/bin:$PATH"
+export LDFLAGS="$LDFLAGS -L/usr/local/opt/openssl/lib"
+export CFLAGS="$CFLAGS -I/usr/local/opt/openssl/include"
+export PKG_CONFIG_PATH="/usr/local/opt/openssl/lib/pkgconfig:$PKG_CONFIG_PATH"
 export CMAKE_PREFIX_PATH="/usr/local/opt/qt:$CMAKE_PREFIX_PATH"
-
-# MacPorts
-if [ -d /opt/local ]; then
-    export PATH="/opt/local/sbin:/opt/local/bin:$PATH"
-fi
 
 # Use Python3 for virtualenvwrapper
 export VIRTUALENVWRAPPER_PYTHON=/usr/local/bin/python3
