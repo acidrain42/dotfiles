@@ -61,6 +61,8 @@ SAVEHIST=5000
 
 # Add completion for cd ..
 zstyle ':completion:*' special-dirs true
+# Case insensitive completion
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
 
 # Version Control System
 zstyle ':vcs_info:*' actionformats \

@@ -23,8 +23,8 @@ if [ -n "${branches_merged}" ]; then
 fi
 
 read -r -p "Delete branches? [Y/n] " response
-response=${response,,}    # tolower
+response="$(echo "$response" | tr '[:upper:]' '[:lower:]')"
 
-if [[ ${response,,} != "n" ]]; then
+if [[ ${response} != "n" ]]; then
     printf "%s\\n%s\\n" "${branches_gone}" "${branches_merged}" | sort | uniq | xargs git branch -D
 fi
