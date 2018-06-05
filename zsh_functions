@@ -89,3 +89,8 @@ function tctest() {
         printf "\n";
     }'
 }
+
+function fix-perm {
+    find -type f -not -perm 644 -print0 | xargs -0 chmod 644
+    find -type d -not -perm 755 -print0 | xargs -0 chmod 755
+}
