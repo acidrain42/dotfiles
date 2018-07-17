@@ -135,6 +135,7 @@ if [[ -f ~/.fzf.zsh ]]; then
     # --follow: Follow symlinks
     export FZF_DEFAULT_COMMAND='rg --files --follow --glob '\''!Library/*'\'' 2>/dev/null'
     export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+    export FZF_CTRL_T_OPTS="--tiebreak=end"
 fi
 
 # Enable core dumps
@@ -167,10 +168,10 @@ export CMAKE_PREFIX_PATH="/usr/local/opt/qt:$CMAKE_PREFIX_PATH"
 # Use Python3 for virtualenvwrapper
 export VIRTUALENVWRAPPER_PYTHON=/usr/local/bin/python3
 
-ANDROID_HOME="$HOME/Android/Sdk"
-if [ -d "$ANDROID_HOME" ]; then
-    export ANDROID_HOME
-    export PATH="$ANDROID_HOME/tools:$ANDROID_HOME/platform-tools:$PATH"
+ANDROID_SDK_ROOT="/usr/local/share/android-sdk"
+if [ -d "$ANDROID_SDK_ROOT" ]; then
+    export ANDROID_SDK_ROOT
+    export PATH="$ANDROID_SDK_ROOT/tools:$ANDROID_SDK_ROOT/platform-tools:$PATH"
 fi
 
 [[ -f "$HOME/.pythonrc" ]] && export PYTHONSTARTUP="$HOME/.pythonrc"

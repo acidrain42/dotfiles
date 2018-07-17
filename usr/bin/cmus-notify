@@ -53,6 +53,7 @@ def get_cover(m):
 
     return next((os.path.join(album_dir, f) for f in os.listdir(album_dir) if f.startswith('cover.')), None)
 
+
 class Metadata:
     def __init__(self):
         self.file = None
@@ -90,10 +91,10 @@ def main():
 
     if m.status == 'playing':
         title = '%s - %s' % (m.artist, m.title)
-        body = '%s %s' % (m.album, format_track(m))
+        body = '%s\n%s' % (m.album, format_track(m))
         position = format_position(m)
         if position:
-            body += '\n' + position
+            body += ', ' + position
     elif m.status == 'paused':
         title="C* Music Player"
         body="Paused"
