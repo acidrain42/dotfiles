@@ -158,6 +158,7 @@ export GOPATH="$HOME/usr/go"
 export CARGO_HOME="$HOME/usr/cargo"
 [[ -d "$CARGO_HOME/bin" ]] && export PATH="$CARGO_HOME/bin:$PATH"
 
+# Homebrew
 if installed brew; then
     BREW_PREFIX="/usr/local"
     export PATH="$PATH:${BREW_PREFIX}/sbin"
