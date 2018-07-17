@@ -20,6 +20,7 @@ DOTFILES=(
 
 APPS=(
     'colordiff'
+    'fd'
     'fzf'
     'rg'
     'terminal-notifier'

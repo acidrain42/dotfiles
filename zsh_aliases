@@ -58,6 +58,8 @@ fi
 
 if installed colordiff; then
     alias diff='colordiff -u'
+else
+    alias diff='diff -u'
 fi
 
 if [ -x ~/Applications/mpv.app/Contents/MacOS/mpv ]; then

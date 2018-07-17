@@ -249,7 +249,8 @@ xmap ga <Plug>(EasyAlign)
 nmap ga <Plug>(EasyAlign)
 
 " FZF
-nnoremap <leader>f :FZF ~<CR>
+nnoremap <leader>fh :FZF ~<CR>
+nnoremap <leader>f. :FZF <CR>
 
 " Match vim colorscheme
 let g:fzf_colors =

@@ -17,6 +17,8 @@
 	co = checkout
 	ci = commit
 	ap = add -p
+	ri = rebase -i
+	rc = rebase --continue
 	m = difftool -y
 	lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset %C(bold magenta)(%G?)%Creset' --abbrev-commit
 	fixup = commit --amend --no-edit
