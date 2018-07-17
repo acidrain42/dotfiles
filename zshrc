@@ -168,7 +168,7 @@ export CMAKE_PREFIX_PATH="/usr/local/opt/qt:$CMAKE_PREFIX_PATH"
 # Use Python3 for virtualenvwrapper
 export VIRTUALENVWRAPPER_PYTHON=/usr/local/bin/python3
 
-ANDROID_SDK_ROOT="$HOME/Android/Sdk"
+ANDROID_SDK_ROOT="/usr/local/share/android-sdk"
 if [ -d "$ANDROID_SDK_ROOT" ]; then
     export ANDROID_SDK_ROOT
     export PATH="$ANDROID_SDK_ROOT/tools:$ANDROID_SDK_ROOT/platform-tools:$PATH"
