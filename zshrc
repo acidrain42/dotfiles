@@ -159,7 +159,7 @@ export GOPATH="$HOME/usr/go"
 export CARGO_HOME="$HOME/usr/cargo"
 [[ -d "$CARGO_HOME/bin" ]] && export PATH="$CARGO_HOME/bin:$PATH"
 
-# Brew Kegs Paths
+# Homebrew
 export LDFLAGS="$LDFLAGS -L/usr/local/opt/openssl/lib"
 export CFLAGS="$CFLAGS -I/usr/local/opt/openssl/include"
 export PKG_CONFIG_PATH="/usr/local/opt/openssl/lib/pkgconfig:$PKG_CONFIG_PATH"
