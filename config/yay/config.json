@@ -23,5 +23,13 @@
 	"timeupdate": false,
 	"devel": false,
 	"cleanAfter": false,
-	"gitclone": true
+	"gitclone": true,
+	"provides": true,
+	"pgpfetch": true,
+	"upgrademenu": true,
+	"cleanmenu": true,
+	"diffmenu": true,
+	"editmenu": false,
+	"combinedupgrade": true,
+	"useask": false
 }
