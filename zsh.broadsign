@@ -10,20 +10,25 @@ alias sqlvim="vim -c 'split | wincmd j | terminal' $HOME/broadsign/scratch.sql"
 # Local
 alias sqllocal='pgcli -h localhost -U postgres -d bs_sales'
 
+# Ubuntu
+alias sqlubuntu='pgcli -h mlemay-ubuntu -p 5432 -U postgres -d bs_sales'
+alias tunubuntu='printf "\\e[33mOpening tunnel to Ubuntu on port 54325\\e[0m\n"; ssh -L54325:localhost:5432 mlemay-ubuntu'
+alias sqlubuntu-tun='pgcli -h localhost -p 54325 -U postgres -d bs_sales'
+
 # QA
-alias tunqa='echo "Opening tunnel to QA on port 54321"; ssh -L54321:qa-bs-us-east-1-sso-pg1.cbcqvvyhz8cc.us-east-1.rds.amazonaws.com:5432 aws-qa-st01 -N'
+alias tunqa='printf "\\e[33mOpening tunnel to QA on port 54321\\e[0m\n"; ssh -L54321:qa-bs-us-east-1-sso-pg1.cbcqvvyhz8cc.us-east-1.rds.amazonaws.com:5432 aws-qa-st01'
 alias sqlqa='pgcli -h localhost -p 54321 -U st_db -d stdb01'
 
 # MasterQA
-alias tunmasterqa='echo "Opening tunnel to MasterQA on port 54322"; ssh -L54322:qa-bs-canada-central-1-sd4-db01.ckr0t9mkdvyb.ca-central-1.rds.amazonaws.com:5432 masterqa-stsync01 -N'
+alias tunmasterqa='printf "\\e[33mOpening tunnel to MasterQA on port 54322\\e[0m\n"; ssh -L54322:qa-bs-canada-central-1-sd4-db01.ckr0t9mkdvyb.ca-central-1.rds.amazonaws.com:5432 masterqa-node01'
 alias sqlmasterqa='pgcli -h localhost -p 54322 -U sd_user -d sddb'
 
 # Beta
-alias tunbeta='echo "Opening tunnel to Beta on port 54323"; ssh -L54323:betadirectdb01.cezdtltl6uq9.ca-central-1.rds.amazonaws.com:5432 beta-node01 -N'
+alias tunbeta='printf "\\e[33mOpening tunnel to Beta on port 54323\\e[0m\n"; ssh -L54323:betadirectdb01.cezdtltl6uq9.ca-central-1.rds.amazonaws.com:5432 beta-node01'
 alias sqlbeta='pgcli -h localhost -p 54323 -U sd_user -d sddb'
 
 # Prod
-alias tunprod='echo "Opening tunnel to Prod on port 54324"; ssh -L54324:pr-bs-canada-central-1-sd-db01.ckr0t9mkdvyb.ca-central-1.rds.amazonaws.com:5432 prod-node01 -N'
+alias tunprod='printf "\\e[33mOpening tunnel to Prod on port 54324\\e[0m\n"; ssh -L54324:pr-bs-canada-central-1-sd-db01.ckr0t9mkdvyb.ca-central-1.rds.amazonaws.com:5432 prod-node01'
 alias sqlprod='pgcli -h localhost -p 54324 -U sd_user -d sddb'
 
 alias gv='pushd ~/src/st/app; npm i; grunt verify; popd'
