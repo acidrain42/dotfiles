@@ -38,8 +38,10 @@ fi
 UTILS=(
     'mkdir'
     'readlink'
+    'rm'
     'shred'
     'tail'
+    'zcat'
 )
 
 # Replace utils by their gnu coreutils counterparts
@@ -63,8 +65,8 @@ else
     alias diff='diff -u'
 fi
 
-if [ -x ~/Applications/mpv.app/Contents/MacOS/mpv ]; then
-    alias mpv="~/Applications/mpv.app/Contents/MacOS/mpv"
+if [ -x /Applications/mpv.app/Contents/MacOS/mpv ]; then
+    alias mpv="/Applications/mpv.app/Contents/MacOS/mpv"
 fi
 
 if [ "$TERM" = "xterm-termite" ] || [ "$TERM" = "tmux-256color" ]; then
