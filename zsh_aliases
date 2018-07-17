@@ -11,8 +11,9 @@ alias lr='ls -lArth'
 
 # Renaming aliases
 alias lower='rename '\''y/\ \.A-Z/__a-z/'\'''
-alias rename='perl-rename'
-alias fix-song-title='rename '\''s/_/./'\'''
+alias fix-song-title='rename -s "_" "."'
+
+alias make='make -j4'
 
 alias grep='grep --color=auto'
 alias egrep='egrep --color=auto'
