@@ -94,9 +94,9 @@ if installed tmux; then
         mkdir -p "$HOME/.config/tmux/plugins/tmp"
         git clone https://github.com/tmux-plugins/tpm ~/.config/tmux/plugins/tpm
     else
-        pushd -q "$HOME/.config/tmux/plugins/tmp"
+        pushd "$HOME/.config/tmux/plugins/tmp"
         git pull
-        popd -q
+        popd
     fi
 fi
 
