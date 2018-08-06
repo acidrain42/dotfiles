@@ -16,6 +16,10 @@ Plug 'junegunn/vim-slash'
 Plug 'junegunn/vim-easy-align'
 Plug 'easymotion/vim-easymotion'
 Plug 'junegunn/fzf'
+Plug 'christoomey/vim-tmux-navigator'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+
 Plug 'lifepillar/pgsql.vim'
 
 if has('nvim') || (v:version >= 800)
@@ -23,9 +27,10 @@ if has('nvim') || (v:version >= 800)
 endif
 
 " Colorschemes
-Plug 'twerth/ir_black'
-Plug 'NLKNguyen/papercolor-theme'
-Plug 'alem0lars/vim-colorscheme-darcula'
+"Plug 'twerth/ir_black'
+"Plug 'NLKNguyen/papercolor-theme'
+"Plug 'alem0lars/vim-colorscheme-darcula'
+Plug 'jnurmine/Zenburn'
 
 call plug#end()
 
@@ -89,18 +94,6 @@ inoremap <down>  <nop>
 inoremap <left>  <nop>
 inoremap <right> <nop>
 
-" Move while in insert mode
-nnoremap <C-k> <C-w>k
-nnoremap <C-j> <C-w>j
-nnoremap <C-h> <C-w>h
-nnoremap <C-l> <C-w>l
-
-" Switch panes
-inoremap <C-k> <up>
-inoremap <C-j> <down>
-inoremap <C-h> <left>
-inoremap <C-l> <right>
-
 " Start/End of line
 nnoremap H ^
 nnoremap L $
@@ -113,6 +106,14 @@ noremap Q <nop>
 " Insert at beginning / end of selected lines
 vnoremap i <C-V>^I
 vnoremap a <C-V>$A
+
+" Cause we all do these mistakes
+command! W w
+command! Wq wq
+command! WQ wq
+command! Q q
+command! Qa qa
+command! QA qa
 
 " Close current buffer but keep window
 nmap <leader>d :bp<bar>sp<bar>bn<bar>bd<CR>
@@ -180,7 +181,7 @@ if substitute(system('tput colors'), '\n', '', '') == "256"
     endif
 
     set bg=dark
-    colorscheme darcula
+    colorscheme zenburn
 else
     colorscheme desert
 endif
@@ -207,9 +208,6 @@ nnoremap <C-n> :NERDTreeToggle<CR>
 nnoremap <leader>nn :NERDTreeToggle<CR>
 nnoremap <leader>nc :NERDTreeCWD<CR>
 nnoremap <leader>nf :NERDTreeFind<CR>
-
-" MRU
-nnoremap <Leader>m :MRU<CR>
 
 " vim-better-whitespace
 nnoremap <leader>ws :StripWhitespace<CR>
@@ -269,3 +267,8 @@ let g:fzf_colors =
   \ 'marker':  ['fg', 'Keyword'],
   \ 'spinner': ['fg', 'Label'],
   \ 'header':  ['fg', 'Comment'] }
+
+" Airline
+set noshowmode
+set laststatus=2
+let g:airline_theme='zenburn'

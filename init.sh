@@ -89,6 +89,17 @@ if installed vim; then
     fi
 fi
 
+if installed tmux; then
+    if [ ! -e "$HOME/.config/tmux/plugins/tmp" ]; then
+        mkdir -p "$HOME/.config/tmux/plugins/tmp"
+        git clone https://github.com/tmux-plugins/tpm ~/.config/tmux/plugins/tpm
+    else
+        pushd -q "$HOME/.config/tmux/plugins/tmp"
+        git pull
+        popd -q
+    fi
+fi
+
 installed crontab && crontab "$DOTFILES_DIR/crontab"
 
 MISSING_APPS=""

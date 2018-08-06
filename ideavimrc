@@ -39,3 +39,9 @@ noremap Q <nop>
 " Insert at beginning / end of selected lines
 vnoremap i <C-V>^I
 vnoremap a <C-V>$A
+
+" Jetbrains Actions
+noremap <leader>o :action OptimizeImports<CR>
+noremap <leader>l :action ReformatCode<CR>
+vnoremap <leader>o :action OptimizeImports<CR>
+vnoremap <leader>l :action ReformatCode<CR>
