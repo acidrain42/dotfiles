@@ -27,8 +27,12 @@ alias sqlmasterqa='pgcli -h localhost -p 54322 -U sd_user -d sddb'
 alias tunbeta='printf "\\e[33mOpening tunnel to Beta on port 54323\\e[0m\n"; ssh -L54323:betadirectdb01.cezdtltl6uq9.ca-central-1.rds.amazonaws.com:5432 beta-node01'
 alias sqlbeta='pgcli -h localhost -p 54323 -U sd_user -d sddb'
 
+# Staging
+alias tunstaging='printf "\\e[33mOpening tunnel to Staging on port 54326\\e[0m\n"; ssh -L54326:stgdirectdb01.cagwnbmes2nq.ca-central-1.rds.amazonaws.com:5432 staging-node01'
+alias sqlstaging='pgcli -h localhost -p 54326 -U sd_user -d sddb'
+
 # Prod
-alias tunprod='printf "\\e[33mOpening tunnel to Prod on port 54324\\e[0m\n"; ssh -L54324:pr-bs-canada-central-1-sd-db01.ckr0t9mkdvyb.ca-central-1.rds.amazonaws.com:5432 prod-node01'
+alias tunprod='printf "\\e[33mOpening tunnel to Prod on port 54324\\e[0m\n"; ssh -L54324:10.2.0.145:5432 prod-node01'
 alias sqlprod='pgcli -h localhost -p 54324 -U sd_user -d sddb'
 
 alias gv='pushd ~/src/st/app; npm i; grunt verify; popd'
