@@ -163,10 +163,15 @@ export CARGO_HOME="$HOME/usr/cargo"
 if installed brew; then
     BREW_PREFIX="/usr/local"
     export PATH="$PATH:${BREW_PREFIX}/sbin"
+
+    # OpenSSL
     export LDFLAGS="$LDFLAGS -L${BREW_PREFIX}/opt/openssl/lib"
     export CFLAGS="$CFLAGS -I${BREW_PREFIX}/opt/openssl/include"
     export PKG_CONFIG_PATH="${BREW_PREFIX}/opt/openssl/lib/pkgconfig:$PKG_CONFIG_PATH"
 
+    # Qt
+    export CMAKE_PREFIX_PATH="${BREW_PREFIX}/opt/qt:$CMAKE_PREFIX_PATH"
+    export PATH="$PATH:${BREW_PREFIX}/opt/qt/bin"
 fi
 
 # Use Python3 for virtualenvwrapper
