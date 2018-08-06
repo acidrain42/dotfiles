@@ -13,6 +13,7 @@ fi
 autoload -U compinit promptinit colors
 autoload -Uz vcs_info
 
+compinit -i
 promptinit
 colors
 
@@ -165,9 +166,7 @@ if installed brew; then
     export LDFLAGS="$LDFLAGS -L${BREW_PREFIX}/opt/openssl/lib"
     export CFLAGS="$CFLAGS -I${BREW_PREFIX}/opt/openssl/include"
     export PKG_CONFIG_PATH="${BREW_PREFIX}/opt/openssl/lib/pkgconfig:$PKG_CONFIG_PATH"
-    export CMAKE_PREFIX_PATH="${BREW_PREFIX}/opt/qt:$CMAKE_PREFIX_PATH"
 
-    FPATH="${BREW_PREFIX}/share/zsh/site-functions:$FPATH"
 fi
 
 # Use Python3 for virtualenvwrapper
@@ -182,8 +181,6 @@ fi
 [[ -f "$HOME/.pythonrc" ]] && export PYTHONSTARTUP="$HOME/.pythonrc"
 
 unset -f installed
-
-compinit -i
 
 if [[ "$PROFILE_STARTUP" == true ]]; then
     unsetopt xtrace
