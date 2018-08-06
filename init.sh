@@ -90,11 +90,11 @@ if installed vim; then
 fi
 
 if installed tmux; then
-    if [ ! -e "$HOME/.config/tmux/plugins/tmp" ]; then
-        mkdir -p "$HOME/.config/tmux/plugins/tmp"
+    if [ ! -e "$HOME/.config/tmux/plugins/tpm" ]; then
+        mkdir -p "$HOME/.config/tmux/plugins/tpm"
         git clone https://github.com/tmux-plugins/tpm ~/.config/tmux/plugins/tpm
     else
-        pushd "$HOME/.config/tmux/plugins/tmp"
+        pushd "$HOME/.config/tmux/plugins/tpm"
         git pull
         popd
     fi
