@@ -41,6 +41,9 @@ fi
 # Temporary file to disable autoquit
 ZSH_TMUX_NO_AUTOQUIT_FILE="/tmp/zsh_tmux_no_autoquit.${USER}"
 
+# Change TPM install path
+export TMUX_PLUGIN_MANAGER_PATH="$HOME/.local/share/tmux/plugins/"
+
 function _zsh_tmux_setup_term() {
     # Determine if the terminal supports 256 colors
     if [ $(tput colors) -eq 256 ]; then
