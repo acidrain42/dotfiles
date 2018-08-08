@@ -19,6 +19,7 @@ Plug 'junegunn/fzf'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
+Plug 'tpope/vim-fugitive'
 
 Plug 'lifepillar/pgsql.vim'
 
@@ -272,3 +273,12 @@ let g:fzf_colors =
 set noshowmode
 set laststatus=2
 let g:airline_theme='zenburn'
+
+let g:airline_left_sep = ''
+let g:airline_right_sep = ''
+let g:airline_left_alt_sep= '>'
+let g:airline_right_alt_sep = '<'
+
+let g:airline_section_z="%#__accent_bold#%4l/%L%#__restore__# :%3v"
+
+let g:airline#extensions#branch#enabled = 1
