@@ -28,7 +28,7 @@ alias tunbeta='printf "\\e[33mOpening tunnel to Beta on port 54323\\e[0m\n"; ssh
 alias sqlbeta='pgcli -h localhost -p 54323 -U sd_user -d sddb'
 
 # Staging
-alias tunstaging='printf "\\e[33mOpening tunnel to Staging on port 54326\\e[0m\n"; ssh -L54326:stgdirectdb01.cagwnbmes2nq.ca-central-1.rds.amazonaws.com:5432 staging-node01'
+alias tunstaging='printf "\\e[33mOpening tunnel to Staging on port 54326\\e[0m\n"; ssh -L54326:10.108.22.28:5432 staging-node01'
 alias sqlstaging='pgcli -h localhost -p 54326 -U sd_user -d sddb'
 
 # Prod
