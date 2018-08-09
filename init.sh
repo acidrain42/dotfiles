@@ -57,15 +57,15 @@ for file in "${DOTFILES[@]}"; do
     create_link "$HOME/.${file}" "$DOTFILES_DIR/${file}"
 done
 
-for file in $DOTFILES_DIR/config/*; do
+for file in "${DOTFILES_DIR}"/config/*; do
     create_link "$HOME/.config/$(basename "$file")" "$file"
 done
 
-for file in $DOTFILES_DIR/usr/bin/*; do
+for file in "${DOTFILES_DIR}"/usr/bin/*; do
     create_link "$HOME/usr/bin/$(basename "$file")" "$file"
 done
 
-for file in $DOTFILES_DIR/usr/lib/*; do
+for file in "${DOTFILES_DIR}"/usr/lib/*; do
     create_link "$HOME/usr/lib/$(basename "$file")" "$file"
 done
 
