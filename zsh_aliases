@@ -35,10 +35,14 @@ if installed brew; then
     alias up='brew upgrade'
 fi
 
-UTILS=(
+GNU_UTILS=(
+    'cp'
+    'md5sum'
     'mkdir'
     'readlink'
     'rm'
+    'sha1sum'
+    'sha256sum'
     'shred'
     'tail'
     'zcat'
@@ -47,7 +51,7 @@ UTILS=(
 # Replace utils by their gnu coreutils counterparts
 if installed gls; then
     alias ls='gls --color=auto -v --group-directories-first'
-    for i in ${UTILS[@]}; do
+    for i in ${GNU_UTILS[@]}; do
         alias $i="g$i"
     done
 else
