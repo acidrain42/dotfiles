@@ -10,6 +10,8 @@ if [[ "$PROFILE_STARTUP" == true ]]; then
     setopt xtrace prompt_subst
 fi
 
+fpath=("$HOME/.local/share/zsh/completions" $fpath)
+
 autoload -U compinit promptinit colors
 autoload -Uz vcs_info
 
@@ -36,6 +38,8 @@ setopt HIST_REDUCE_BLANKS
 
 setopt prompt_subst
 setopt correct
+setopt auto_pushd
+setopt pushd_ignore_dups
 
 # bind special keys according to readline configuration
 [ -f /etc/inputrc ] && eval "$(sed -n 's/^/bindkey /; s/: / /p' /etc/inputrc)" > /dev/null
@@ -81,6 +85,12 @@ vcs_info_wrapper() {
     fi
 }
 
+nvm_info_wrapper() {
+    if [ -n "$NVM_BIN" ]; then
+        echo "[node $(basename $(dirname $NVM_BIN))] "
+    fi
+}
+
 # make less more friendly for non-text input files, see lesspipe(1)
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
 
@@ -96,7 +106,7 @@ PS1="%(!.${FG_BRIGHT_RED}.${FG_BRIGHT_GREEN})%n@%m"
 [[ ! -z "$SSH_CLIENT" ]] && PS1="${PS1}%(!.${FG_BRIGHT_GREEN}.${FG_BRIGHT_RED})[ssh]"
 PS1="${PS1}${COLOR_RESET}:${FG_BRIGHT_BLUE}%1~${COLOR_RESET}%(!.#.$) "
 PS2='> '
-RPROMPT=$'$(vcs_info_wrapper)'"%(1j.[%jbg].)[%D{%T}]%(?.${FG_BRIGHT_GREEN}.${FG_BRIGHT_RED})[%?]${COLOR_RESET}"
+RPROMPT=$'$(nvm_info_wrapper)''$(vcs_info_wrapper)'"%(1j.[%jbg].)[%D{%T}]%(?.${FG_BRIGHT_GREEN}.${FG_BRIGHT_RED})[%?]${COLOR_RESET}"
 
 if installed gdircolors; then
     [ -r ~/.dircolors ] && eval "$(gdircolors -b ~/.dircolors)" || eval "$(gdircolors -b)"

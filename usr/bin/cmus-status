@@ -1,20 +1,7 @@
 #! /usr/bin/env python3
 
 import subprocess
-import sys
-
-p = subprocess.run(["cmus-remote", "-Q"], stdout=subprocess.PIPE)
-if p.returncode != 0:
-    sys.exit(p.returncode)
 
 args = ['cmus-notify']
-for l in p.stdout.decode().split('\n'):
-    if l == '' or l.startswith('set'):
-        continue
-
-    if l.startswith('tag'):
-        l = l[4:]
-
-    args += l.split(' ', maxsplit=1)
 
 subprocess.run(args)
