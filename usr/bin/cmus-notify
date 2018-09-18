@@ -1,8 +1,9 @@
 #! /usr/bin/env python3
 
 import os
-import sys
+import socket
 import subprocess
+import sys
 
 from datetime import datetime, timedelta
 
@@ -15,43 +16,24 @@ def debug_print(*args):
     if not debug:
         return
 
+    def format_arg(s):
+        if not isinstance(s, str):
+            return s
+
+        has_single_quote = "'" in s
+        has_double_quote = '"' in s
+
+        if has_single_quote and has_double_quote:
+            return "'%s'" % (s.replace("'", "'\\''"))
+        elif has_single_quote:
+            return '"%s"' % s
+        else:
+            return "'%s'" % s
+
+    args = [format_arg(a) for a in args]
+
     with open(os.path.expanduser('~/debug.log'), 'a') as f:
         f.write('%s [cmus-notify] %s\n' % (timestamp, ' '.join(args)))
-
-
-def format_track(m):
-    if m.discnumber:
-        return 'disc %s, track %s' % (m.discnumber, m.tracknumber)
-    else:
-        return 'track %s' % m.tracknumber
-
-
-def format_time(sec):
-    if type(sec) == str:
-        sec = int(sec)
-
-    sec_str = str(timedelta(seconds=sec))
-
-    return sec_str[2:] if sec < 3600 else sec_str.zfill(8)
-
-
-def format_position(m):
-    if not m.duration:
-        return None
-
-    if m.position:
-        return '%s / %s' % (format_time(m.position), format_time(m.duration))
-    else:
-        return format_time(m.duration)
-
-
-def get_cover(m):
-    if not m.file:
-        return None
-
-    album_dir = os.path.dirname(m.file)
-
-    return next((os.path.join(album_dir, f) for f in os.listdir(album_dir) if f.startswith('cover.')), None)
 
 
 class Metadata:
@@ -68,15 +50,125 @@ class Metadata:
         self.status = None
         self.cover = None
 
+    def get_title(self):
+        if self.artist and self.title:
+            return '%s - %s' % (self.artist, self.title)
+        else:
+            return 'C* Music Player'
 
-def extract_metadata(argv):
+    def get_body(self):
+        body = '%s%s\n%s' % (self.album, self._get_status(), self._get_track())
+        position = self._get_duration()
+        if position:
+            body += ', ' + position
+
+        return body
+
+    def get_cover(self):
+        if not self.file:
+            return None
+
+        album_dir = os.path.dirname(self.file)
+
+        return next((os.path.join(album_dir, f)
+            for f in os.listdir(album_dir)
+            if f.startswith('cover.')), None)
+
+    def _get_status(self):
+        return {
+            'playing': '',
+            'paused': ' [Paused]',
+            'stopped': ' [Stopped]'
+        }[self.status]
+
+    def _get_track(self):
+        if self.discnumber:
+            return 'disc %s, track %s' % (self.discnumber, self.tracknumber)
+        else:
+            return 'track %s' % self.tracknumber
+
+    def _get_duration(self):
+        if not self.duration:
+            return None
+
+        if self.position:
+            return '%s / %s' % (self._format_time(self.position),
+                                self._format_time(self.duration))
+        else:
+            return self._format_time(self.duration)
+
+    @staticmethod
+    def _format_time(sec):
+        if type(sec) == str:
+            sec = int(sec)
+
+        sec_str = str(timedelta(seconds=sec))
+
+        return sec_str[2:] if sec < 3600 else sec_str.zfill(8)
+
+
+def extract_metadata(tags):
     m = Metadata()
-    for i in range(len(argv) // 2):
-        k = argv[i * 2]
-        v = argv[i * 2 + 1]
-        setattr(m, k, v)
+
+    for t in tags:
+        elems = t.split(' ')
+
+        name, value = {
+            'status': lambda x: ('status', x[0]),
+            'file': lambda x: ('file', x[0]),
+            'duration': lambda x: ('duration', x[0]),
+            'position': lambda x: ('position', x[0]),
+            'tag': lambda x: (x[0], ' '.join(x[1:]))
+        }.setdefault(elems[0], lambda x: (None, None))(elems[1:])
+
+        if name and value:
+            setattr(m, name, value)
 
     return m
+
+
+def notify(title, body='', icon=None):
+    args = ['terminal-notifier', '-group', 'cmus', '-title', title, '-message', body]
+
+    if icon:
+        args += ['-appIcon', icon]
+
+    debug_print(*args)
+    subprocess.run(args)
+
+
+def send(sock, msg):
+    if isinstance(msg, str):
+        msg = msg.encode('utf-8')
+
+    bytes_sent = 0
+    msg_len = len(msg)
+
+    while bytes_sent < msg_len:
+        sent = sock.send(msg[bytes_sent:])
+
+        if sent == 0:
+            raise RuntimeError("socket connection broken")
+
+        bytes_sent += sent
+
+def recv(sock):
+    chunks = []
+    buffer_size = 2048
+
+    while True:
+        chunk = sock.recv(buffer_size)
+
+        if not chunk:
+            raise RuntimeError("socket connection broken")
+
+        chunk = chunk.decode('utf-8')
+        chunks.append(chunk)
+
+        if chunk.endswith('\n\n'):
+            break
+
+    return ''.join(chunks)
 
 
 def main():
@@ -87,30 +179,23 @@ def main():
 
     debug_print(*sys.argv[1:])
 
-    m = extract_metadata(sys.argv[1:])
+    sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
+    try:
+        sock.connect(os.path.expanduser("~/.config/cmus/socket"))
+    except FileNotFoundError:
+        notify("C* Music Player not running")
+        return 1
 
-    if m.status == 'playing':
-        title = '%s - %s' % (m.artist, m.title)
-        body = '%s\n%s' % (m.album, format_track(m))
-        position = format_position(m)
-        if position:
-            body += ', ' + position
-    elif m.status == 'paused':
-        title="C* Music Player"
-        body="Paused"
-    elif m.status == 'stopped':
-        title="C* Music Player"
-        body="Stopped"
+    send(sock, "status\n")
+    resp = recv(sock)
+    sock.shutdown(socket.SHUT_RDWR)
+    sock.close()
 
-    args = ['terminal-notifier', '-group', 'cmus', '-title', title, '-message', body]
+    m = extract_metadata(resp.split('\n'))
+    notify(m.get_title(), m.get_body(), m.get_cover())
 
-    cover = get_cover(m)
-    if cover:
-        args += ['-appIcon', cover]
-
-    debug_print(' '.join(args))
-    subprocess.run(args)
+    return 0
 
 
 if __name__ == '__main__':
-    main()
+    sys.exit(main())
