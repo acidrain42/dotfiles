@@ -1,15 +1,21 @@
+# Interface
+colorscheme zenburn
+set start_view=playlist
+set follow=true
+
+# Playback
+set continue=true
+set repeat=true
+
+# Formatting
 set format_current= %a - %l - %{?D?%D.}%02n. %t%= %y 
 set format_playlist= %-21%a %-21%l %{?D?%D.?  }%02n. %t%= [%{codec} (%4{bitrate}kbps)] %d 
 set format_playlist_va= %-21%a %-21%l %{?D?%D.?  }%02n. %t%= [%{codec} (%4{bitrate}kbps)] %d 
-#set format_playlist_va= %-21%A %3n. %t (%a)%= %y %d %{?X!=0?%3X ?    }
-#set format_statusline= %{status} %{?show_playback_position?%{position} %{?duration?/ %{duration} }?%{?duration?%{duration} }}- %{total} %{?volume>=0?vol: %{?lvolume!=rvolume?%{lvolume},%{rvolume} ?%{volume} }}%{?stream?buf: %{buffer} }%{?show_current_bitrate & bitrate>=0? %{bitrate} kbps }%=%{?repeat_current?repeat current?%{?play_library?%{playlist_mode} from %{?play_sorted?sorted }library?playlist}} | %1{continue}%1{follow}%1{repeat}%1{shuffle} 
-#set format_title=%a - %l - %t (%y)
 set format_trackwin= %{?D?%D.?  }%02n. %t%= %g [%{codec} (%4{bitrate}kbps)] %d 
-set format_trackwin_va= %{?D?%D.?  }%02n. %t (%a)%= %g [%{codec} (%4{bitrate}kbps)] %d 
 set format_trackwin_album= %y - %l 
+set format_trackwin_va= %{?D?%D.?  }%02n. %t (%a)%= %g [%{codec} (%4{bitrate}kbps)] %d 
 set format_treewin=  %y. %l
 set format_treewin_artist=%{?A?%A?%a}
 
-set start_view=playlist
-
+# Notifications
 set status_display_program=cmus-notify

@@ -45,7 +45,7 @@ def convert_file(flac_file):
     try:
         err_msg = None
         subprocess.call(('metaflac', '--remove-replay-gain', flac_file))
-        subprocess.call(('opusenc', '--quiet', '--bitrate', BITRATE, flac_file, opus_file))
+        subprocess.call(('opusenc', '--quiet', '--discard-pictures', '--bitrate', BITRATE, flac_file, opus_file))
     except Exception as e:
         err_msg = str(e)
 
