@@ -90,6 +90,43 @@ function tctest() {
     }'
 }
 
+function colorsample {
+    printf "\\e[0m Normal\n"
+
+    printf "\n"
+
+    printf "\\e[30m 0. Black      \\e[90m 8. Dark Gray\\e[0m\n"
+    printf "\\e[31m 1. Red        \\e[91m 9. Light Red\\e[0m\n"
+    printf "\\e[32m 2. Green      \\e[92m10. Light Green\\e[0m\n"
+    printf "\\e[33m 3. Yellow     \\e[93m11. Light Yellow\\e[0m\n"
+    printf "\\e[34m 4. Blue       \\e[94m12. Light Blue\\e[0m\n"
+    printf "\\e[35m 5. Magenta    \\e[95m13. Light Magenta\\e[0m\n"
+    printf "\\e[36m 6. Cyan       \\e[96m14. Light Cyan\\e[0m\n"
+    printf "\\e[37m 7. Light Grey \\e[97m15. White\\e[0m\n"
+
+    printf "\n"
+
+    printf "\\e[40m 0. Black      \\e[100m 8. Dark Gray\\e[0m\n"
+    printf "\\e[41m\\e[30m 1. Red        \\e[101m 9. Light Red\\e[0m\n"
+    printf "\\e[42m\\e[30m 2. Green      \\e[102m10. Light Green\\e[0m\n"
+    printf "\\e[43m\\e[30m 3. Yellow     \\e[103m11. Light Yellow\\e[0m\n"
+    printf "\\e[44m\\e[30m 4. Blue       \\e[104m12. Light Blue\\e[0m\n"
+    printf "\\e[45m\\e[30m 5. Magenta    \\e[105m13. Light Magenta\\e[0m\n"
+    printf "\\e[46m\\e[30m 6. Cyan       \\e[106m14. Light Cyan\\e[0m\n"
+    printf "\\e[47m\\e[30m 7. Light Grey \\e[107m15. White\\e[0m\n"
+
+    #: Normal      Bright
+    #: --------    -------
+    #: 0 Black      8 Black
+    #: 1 Red        9 Red
+    #: 2 Yellow    10 Yellow
+    #: 3 Green     11 Green
+    #: 4 Blue      12 Blue
+    #: 5 Magenta   13 Magenta
+    #: 6 Cyan      14 Cyan
+    #: 7 White     15 White
+}
+
 function fix-perm {
     find -type f -not -perm 644 -print0 | xargs -0 chmod 644
     find -type d -not -perm 755 -print0 | xargs -0 chmod 755
