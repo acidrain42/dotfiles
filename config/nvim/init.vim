@@ -245,6 +245,7 @@ let g:ale_python_flake8_options = '--max-line-length 120'
 " EasyAlign
 " Start interactive EasyAlign in visual mode (e.g. vipga)
 xmap ga <Plug>(EasyAlign)
+xmap gs :EasyAlign *\ <CR>
 
 " Start interactive EasyAlign for a motion/text object (e.g. gaip)
 nmap ga <Plug>(EasyAlign)
