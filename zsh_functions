@@ -41,7 +41,7 @@ function remove_ext() {
 }
 
 function clip() {
-    cat "$1" | xsel --clipboard
+    cat "$1" | pbcopy
 }
 
 function aur-get() {
