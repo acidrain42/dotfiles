@@ -40,6 +40,10 @@ function remove_ext() {
     echo ${1:r}
 }
 
+function clip() {
+    cat "$1" | xsel --clipboard
+}
+
 function aur-get() {
     if [ $# -lt 1 ]; then
         echo "Usage: $0 packages"

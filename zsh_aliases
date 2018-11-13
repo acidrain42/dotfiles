@@ -1,5 +1,7 @@
-alias sudo='sudo '  # Enable aliases when using sudo
-alias exec='exec '  # Enable aliases when using exec
+# Enable aliases when using these commands
+alias sudo='sudo '
+alias exec='exec '
+alias xargs='xargs '
 
 # ls aliases
 alias ll='ls -lh'
