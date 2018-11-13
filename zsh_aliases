@@ -39,6 +39,7 @@ fi
 
 GNU_UTILS=(
     'cp'
+    'head'
     'md5sum'
     'mkdir'
     'readlink'
