@@ -1,21 +1,22 @@
 [options]
 #allow_bold = true
 #audible_bell = false
+#bold_is_bright = true
 #clickable_url = true
 #dynamic_title = true
 font = Source Code Pro 10
 #fullscreen = true
 maximized = true
-geometry = 120x36
-icon_name = terminal
-#mouse_autohide = true
+#icon_name = terminal
+#mouse_autohide = false
 #scroll_on_output = false
 #scroll_on_keystroke = true
 # Length of the scrollback buffer, 0 disabled the scrollback buffer
 # and setting it to a negative value means "infinite scrollback"
 scrollback_lines = 10000
 #search_wrap = true
-#urgent_on_bell = true
+urgent_on_bell = false
+#hyperlinks = false
 
 # $BROWSER is used by default if set, with xdg-open as a fallback
 #browser = xdg-open
@@ -55,22 +56,22 @@ background = #323232
 highlight = #101010
 
 # Colors from color0 to color254 can be set
-color0 = #2e3436
-color1 = #cc0000
-color2 = #4e9a06
-color3 = #c4a000
-color4 = #3465a4
-color5 = #75507b
-color6 = #06989a
-color7 = #d3d7cf
-color8 = #555753
-color9 = #ef2929
-color10 = #8ae234
-color11 = #fce94f
-color12 = #729fcf
-color13 = #ad7fa8
-color14 = #34e2e2
-color15 = #eeeeec
+color0  = #151515
+color1  = #dca3a3
+color2  = #7f9f7f
+color3  = #efdcbc
+color4  = #9bb0af
+color5  = #b06698
+color6  = #7cb5b5
+color7  = #d9d9d9
+color8  = #636363
+color9  = #ecbcbc
+color10 = #8faf9f
+color11 = #f0dfaf
+color12 = #abc2c1
+color13 = #b06698
+color14 = #8cd0d3
+color15 = #f7f7f7
 
 [hints]
 #font = Monospace 12
