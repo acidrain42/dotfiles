@@ -34,7 +34,7 @@ alias f='open .'
 
 if installed brew; then
     alias pm='brew'
-    alias up='brew upgrade'
+    alias up='brew upgrade && brew cask upgrade'
 fi
 
 GNU_UTILS=(
