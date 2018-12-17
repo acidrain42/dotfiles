@@ -1,0 +1,105 @@
+#! /bin/bash -eu
+
+shopt -s extglob
+
+# shellcheck disable=SC1090
+source ~/usr/lib/log.sh
+
+function applypatch-msg() {
+    fatal 'Not Implemented'
+}
+
+function commit-msg() {
+    fatal 'Not Implemented'
+}
+
+function fsmonitor-watchman() {
+    fatal 'Not Implemented'
+}
+
+function post-update() {
+    fatal 'Not Implemented'
+}
+
+function prepare-commit-msg() {
+    fatal 'Not Implemented'
+}
+
+function pre-applypatch() {
+    fatal 'Not Implemented'
+}
+
+function pre-commit() {
+    fatal 'Not Implemented'
+}
+
+function pre-push() {
+    ./.git/hooks/pre-push << EOF
+a a a a
+EOF
+}
+
+function pre-rebase() {
+    fatal 'Not Implemented'
+}
+
+function pre-receive() {
+    fatal 'Not Implemented'
+}
+
+function update() {
+    fatal 'Not Implemented'
+}
+
+function available_hooks() {
+    find .git/hooks -type f -not -name '*.sample' -print0 | xargs -0 -n1 basename | tr '\n' ' '
+}
+
+[ -d ".git" ] || fatal "You must be in the root of the repo"
+
+if [ $# -ge 1 ]; then
+    hook="$1"
+else
+    hook="pre-push"
+fi
+
+case "$hook" in
+    "applypatch-msg")
+        applypatch-msg
+        ;;
+    "commit-msg")
+        commit-msg
+        ;;
+    "fsmonitor-watchman")
+        fsmonitor-watchman
+        ;;
+    "post-update")
+        post-update
+        ;;
+    "prepare-commit-msg")
+        prepare-commit-msg
+        ;;
+    "pre-applypatch")
+        pre-applypatch
+        ;;
+    "pre-commit")
+        pre-commit
+        ;;
+    "pre-push")
+        pre-push
+        ;;
+    "pre-rebase")
+        pre-rebase
+        ;;
+    "pre-receive")
+        pre-receive
+        ;;
+    "update")
+        update
+        ;;
+    *)
+        error "Invalid hook: $hook"
+        info "Available hooks: $(available_hooks)"
+        exit 1
+        ;;
+esac
