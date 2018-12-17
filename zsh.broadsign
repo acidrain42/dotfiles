@@ -32,7 +32,7 @@ alias tunstaging='printf "\\e[33mOpening tunnel to Staging on port 54326\\e[0m\n
 alias sqlstaging='pgcli -h localhost -p 54326 -U sd_user -d sddb'
 
 # Prod
-alias tunprod='printf "\\e[33mOpening tunnel to Prod on port 54324\\e[0m\n"; ssh -L54324:10.2.0.145:5432 prod-node01'
+alias tunprod='printf "\\e[33mOpening tunnel to Prod on port 54324\\e[0m\n"; ssh -L54324:10.2.1.70:5432 prod-node01'
 alias sqlprod='pgcli -h localhost -p 54324 -U sd_user -d sddb'
 
 alias gv='pushd ~/src/st/app; npm i; grunt verify; popd'
