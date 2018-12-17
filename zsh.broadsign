@@ -47,7 +47,7 @@ fi
 
 function acidrain() {
     while true; do
-        ssh $@ acidrain.duckdns.org
+        ssh -D1088 $@ acidrain.duckdns.org
         [ $? -eq 255 ] || break
         sleep 5
     done
