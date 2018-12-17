@@ -56,3 +56,5 @@
 	tabwidth = 4
 
 # vim: set noexpandtab:
+[interactive]
+	singleKey = true
