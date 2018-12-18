@@ -76,6 +76,6 @@ if [ -x /Applications/mpv.app/Contents/MacOS/mpv ]; then
     alias mpv="/Applications/mpv.app/Contents/MacOS/mpv"
 fi
 
-if [ "$TERM" = "xterm-termite" ] || [ "$TERM" = "tmux-256color" ]; then
+if [ "$TERM" != "xterm" ] && [ "$TERM" != "xterm-256color" ] && [ "$TERM" != "linux" ]; then
     alias ssh='TERM=xterm-256color ssh'
 fi
