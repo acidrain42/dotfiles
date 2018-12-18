@@ -100,6 +100,15 @@ if installed tmux; then
     fi
 fi
 
+for file in "${DOTFILES_DIR}"/terminfo/*; do
+    tic -x "$file"
+done
+
+if [ "$TERM" = "xterm-256color" ] || [ "$TERM" = "screen-256color" ]; then
+    # https://medium.com/@dubistkomisch/how-to-actually-get-italics-and-true-colour-to-work-in-iterm-tmux-vim-9ebe55ebc2be
+    printf "Don't forget to set xterm-256color-italic in iTerm2 profile\\n"
+fi
+
 installed crontab && crontab "$DOTFILES_DIR/crontab"
 
 MISSING_APPS=""

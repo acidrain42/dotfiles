@@ -1,0 +1,4 @@
+tmux|tmux terminal multiplexer,
+  ritm=\E[23m, rmso=\E[27m, sitm=\E[3m, smso=\E[7m, Ms@,
+  khome=\EOH, kend=\EOF,
+  use=xterm, use=screen,

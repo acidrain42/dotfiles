@@ -31,12 +31,12 @@ fi
 # The TERM to use for non-256 color terminals.
 # Tmux states this should be screen, but you may need to change it on
 # systems without the proper terminfo
-[[ -n "$ZSH_TMUX_FIXTERM_WITHOUT_256COLOR" ]] || ZSH_TMUX_FIXTERM_WITHOUT_256COLOR="screen"
+[[ -n "$ZSH_TMUX_FIXTERM_WITHOUT_256COLOR" ]] || ZSH_TMUX_FIXTERM_WITHOUT_256COLOR="tmux"
 
 # The TERM to use for 256 color terminals.
 # Tmux states this should be screen-256color, but you may need to change it on
 # systems without the proper terminfo
-[[ -n "$ZSH_TMUX_FIXTERM_WITH_256COLOR" ]] || ZSH_TMUX_FIXTERM_WITH_256COLOR="screen-256color"
+[[ -n "$ZSH_TMUX_FIXTERM_WITH_256COLOR" ]] || ZSH_TMUX_FIXTERM_WITH_256COLOR="tmux-256color"
 
 # Temporary file to disable autoquit
 ZSH_TMUX_NO_AUTOQUIT_FILE="/tmp/zsh_tmux_no_autoquit.${USER}"
