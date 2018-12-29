@@ -20,7 +20,6 @@ Plug 'junegunn/fzf'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
-Plug 'tpope/vim-fugitive'
 
 Plug 'lifepillar/pgsql.vim'
 

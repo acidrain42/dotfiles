@@ -71,8 +71,8 @@ class Metadata:
         album_dir = os.path.dirname(self.file)
 
         return next((os.path.join(album_dir, f)
-            for f in os.listdir(album_dir)
-            if f.startswith('cover.')), None)
+                     for f in os.listdir(album_dir)
+                     if f.startswith('cover.')), None)
 
     def _get_status(self):
         return {
@@ -115,7 +115,7 @@ def extract_metadata(tags):
 
         name, value = {
             'status': lambda x: ('status', x[0]),
-            'file': lambda x: ('file', x[0]),
+            'file': lambda x: ('file', ' '.join(x)),
             'duration': lambda x: ('duration', x[0]),
             'position': lambda x: ('position', x[0]),
             'tag': lambda x: (x[0], ' '.join(x[1:]))
@@ -151,6 +151,7 @@ def send(sock, msg):
             raise RuntimeError("socket connection broken")
 
         bytes_sent += sent
+
 
 def recv(sock):
     chunks = []

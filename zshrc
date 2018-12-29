@@ -22,7 +22,7 @@ colors
 [[ -e $HOME/.tmux.zsh ]] && source $HOME/.tmux.zsh
 
 ## Write to the history file immediately, not when the shell exits.
-#setopt INC_APPEND_HISTORY
+setopt INC_APPEND_HISTORY
 ## Share history between all sessions.
 #setopt SHARE_HISTORY
 # Don't record an entry that was just recorded again.

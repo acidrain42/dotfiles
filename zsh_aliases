@@ -39,6 +39,7 @@ fi
 
 GNU_UTILS=(
     'cp'
+    'find'
     'head'
     'md5sum'
     'mkdir'
