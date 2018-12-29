@@ -129,7 +129,7 @@ function colorsample {
     printf "\\e[1;37m 7. Light Grey \\e[1;97m15. White\\e[0m\\n"
     printf "\\n"
 
-    printf "\\e[1m Dim\\n"
+    printf "\\e[2m Dim\\n"
     printf "\\e[2;30m 0. Black      \\e[2;90m 8. Dark Gray\\e[0m\\n"
     printf "\\e[2;31m 1. Red        \\e[2;91m 9. Light Red\\e[0m\\n"
     printf "\\e[2;32m 2. Green      \\e[2;92m10. Light Green\\e[0m\\n"
