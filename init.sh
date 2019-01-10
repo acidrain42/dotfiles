@@ -13,6 +13,7 @@ DOTFILES=(
     'templates'
     'tmux.conf'
     'tmux.zsh'
+    'ycm.conf.py'
     'zsh_aliases'
     'zsh_functions'
     'zshrc'
