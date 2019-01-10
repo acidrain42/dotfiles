@@ -4,11 +4,8 @@ call plug#begin()
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'christoomey/vim-tmux-navigator'
-Plug 'fholgado/minibufexpl.vim'
 Plug 'scrooloose/nerdcommenter'
-Plug 'scrooloose/nerdtree'
 Plug 'Xuyuanp/nerdtree-git-plugin'
-Plug 'majutsushi/tagbar'
 Plug 'ntpeters/vim-better-whitespace'
 Plug 'mhinz/vim-signify'
 Plug 'nathanaelkane/vim-indent-guides'
@@ -19,11 +16,18 @@ Plug '907th/vim-auto-save'
 Plug 'junegunn/vim-slash'
 Plug 'junegunn/vim-easy-align'
 Plug 'junegunn/fzf'
-Plug 'junegunn/vim-peekaboo'
 Plug 'easymotion/vim-easymotion'
 
-if has('nvim') || (v:version >= 800)
-    Plug 'w0rp/ale'
+if !&diff
+    Plug 'Valloric/YouCompleteMe', { 'do': './install.py --clang-completer --rust-completer' }
+    Plug 'fholgado/minibufexpl.vim'
+    Plug 'scrooloose/nerdtree'
+    Plug 'junegunn/vim-peekaboo'
+    Plug 'majutsushi/tagbar'
+
+    if has('nvim') || (v:version >= 800)
+        Plug 'w0rp/ale'
+    endif
 endif
 
 " Colorschemes
@@ -237,6 +241,14 @@ nnoremap <leader>ae :ALEEnable<CR>
 nnoremap <leader>at :ALEToggle<CR>
 nmap <silent> <C-Up> <Plug>(ale_previous_wrap)
 nmap <silent> <C-Down> <Plug>(ale_next_wrap)
+
+let g:ale_set_signs = 0
+hi link ALEErrorLine ErrorMsg
+hi link ALEWarningLine WarningMsg
+let g:ale_lint_on_text_changed = 'normal'
+let g:ale_lint_on_insert_leave = 1
+let g:ale_lint_delay = 0
+
 let g:ale_sh_shellcheck_options = '-x'  " Allow source outside of FILES
 let g:ale_python_flake8_options = '--max-line-length 120'
 
@@ -281,3 +293,6 @@ let g:airline_right_alt_sep = '<'
 let g:airline_section_z="%#__accent_bold#%4l/%L%#__restore__# :%3v"
 
 let g:airline#extensions#branch#enabled = 1
+
+" YouCompleteMe
+let g:ycm_global_ycm_extra_conf = '~/.ycm.conf.py'
