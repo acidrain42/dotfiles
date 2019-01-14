@@ -13,6 +13,8 @@
 	signingkey = 0xCD614E6AAC09AC9B
 [commit]
 	gpgsign = true
+[interactive]
+	singleKey = true
 [alias]
 	st = status
 	co = checkout
@@ -56,5 +58,3 @@
 	tabwidth = 4
 
 # vim: set noexpandtab:
-[interactive]
-	singleKey = true

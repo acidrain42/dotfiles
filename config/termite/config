@@ -1,7 +1,7 @@
 [options]
 #allow_bold = true
 #audible_bell = false
-#bold_is_bright = true
+bold_is_bright = false
 #clickable_url = true
 #dynamic_title = true
 font = Source Code Pro 10
