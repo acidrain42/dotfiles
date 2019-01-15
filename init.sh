@@ -20,6 +20,7 @@ DOTFILES=(
 )
 
 APPS=(
+    'cargo'
     'colordiff'
     'fd'
     'fzf'
@@ -108,6 +109,19 @@ done
 if [ "$TERM" = "xterm-256color" ] || [ "$TERM" = "screen-256color" ]; then
     # https://medium.com/@dubistkomisch/how-to-actually-get-italics-and-true-colour-to-work-in-iterm-tmux-vim-9ebe55ebc2be
     printf "Don't forget to set xterm-256color-italic in iTerm2 profile\\n"
+fi
+
+if installed cargo; then
+    pushd /tmp
+    git clone https://github.com/mathieu-lemay/cmus-notify.git
+
+    pushd cmus-notify
+    cargo build --release
+    mv target/release/cmus-notify "$HOME/usr/bin"
+    popd
+
+    rm -rf cmus-notify
+    popd
 fi
 
 installed crontab && crontab "$DOTFILES_DIR/crontab"
