@@ -16,6 +16,7 @@ Plug '907th/vim-auto-save'
 Plug 'junegunn/vim-slash'
 Plug 'junegunn/vim-easy-align'
 Plug 'junegunn/fzf'
+Plug 'junegunn/fzf.vim'
 Plug 'easymotion/vim-easymotion'
 
 Plug 'lifepillar/pgsql.vim'
@@ -266,6 +267,11 @@ nmap ga <Plug>(EasyAlign)
 " FZF
 nnoremap <leader>fh :FZF ~<CR>
 nnoremap <leader>f. :FZF <CR>
+nnoremap <leader>ft :Tags <CR>
+nnoremap <leader>fl :Lines <CR>
+nnoremap <C-P> :FZF <CR>
+
+let g:fzf_layout = { 'right': '~30%' }
 
 " Match vim colorscheme
 let g:fzf_colors =
