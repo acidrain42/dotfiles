@@ -49,6 +49,12 @@ function installed() {
     return $?
 }
 
+# Use VI mode
+bindkey -v
+
+# Reduce ESC delay to 0.1s
+export KEYTIMEOUT=1
+
 bindkey "^[[A" history-search-backward
 bindkey "^[[B" history-search-forward
 bindkey "^W" backward-kill-word
@@ -91,6 +97,12 @@ nvm_info() {
     fi
 }
 
+venv_info() {
+    if [ -n "$VIRTUAL_ENV" ]; then
+        echo "($(basename $VIRTUAL_ENV)) "
+    fi
+}
+
 # make less more friendly for non-text input files, see lesspipe(1)
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
 
@@ -102,11 +114,21 @@ for COLOR in BLACK RED GREEN YELLOW BLUE MAGENTA CYAN WHITE; do
 done
 COLOR_RESET="%{$reset_color%}"
 
-PS1="%(!.${FG_BRIGHT_RED}.${FG_BRIGHT_GREEN})%n@%m"
-[[ ! -z "$SSH_CLIENT" ]] && PS1="${PS1}%(!.${FG_BRIGHT_GREEN}.${FG_BRIGHT_RED})[ssh]"
-PS1="${PS1}${COLOR_RESET}:${FG_BRIGHT_BLUE}%1~${COLOR_RESET}%(!.#.$) "
+# Prompts
+PS1_='$(venv_info)'"%(!.${FG_BRIGHT_RED}.${FG_BRIGHT_GREEN})%n@%m"
+[[ ! -z "$SSH_CLIENT" ]] && PS1_="${PS1_}%(!.${FG_BRIGHT_GREEN}.${FG_BRIGHT_RED})[ssh]"
+PS1_="${PS1_}${COLOR_RESET}:${FG_BRIGHT_BLUE}%1~${COLOR_RESET}%(!.#.$) "
 PS2='> '
 RPROMPT='$(nvm_info)''$(vcs_info_wrapper)'"%(?..${FG_BRIGHT_RED}[%?]${COLOR_RESET} )[%D{%T}]${COLOR_RESET}"
+
+function zle-line-init zle-keymap-select {
+    VIMODE="${${KEYMAP/vicmd/${FG_BRIGHT_RED}[N]}/(main|viins)/${FG_BRIGHT_BLUE}[I]}${COLOR_RESET}"
+    PS1="${VIMODE} ${PS1_}"
+    zle reset-prompt
+}
+
+zle -N zle-line-init
+zle -N zle-keymap-select
 
 if installed gdircolors; then
     [ -r ~/.dircolors ] && eval "$(gdircolors -b ~/.dircolors)" || eval "$(gdircolors -b)"
