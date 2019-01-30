@@ -97,10 +97,8 @@ nvm_info() {
     fi
 }
 
-venv_info() {
-    if [ -n "$VIRTUAL_ENV" ]; then
-        echo "($(basename $VIRTUAL_ENV)) "
-    fi
+vi_mode_info() {
+    echo "${${${KEYMAP:-main}/vicmd/${FG_BRIGHT_RED}[N]}/(main|viins)/${FG_BRIGHT_BLUE}[I]}${COLOR_RESET} "
 }
 
 # make less more friendly for non-text input files, see lesspipe(1)
@@ -115,19 +113,16 @@ done
 COLOR_RESET="%{$reset_color%}"
 
 # Prompts
-PS1_='$(venv_info)'"%(!.${FG_BRIGHT_RED}.${FG_BRIGHT_GREEN})%n@%m"
-[[ ! -z "$SSH_CLIENT" ]] && PS1_="${PS1_}%(!.${FG_BRIGHT_GREEN}.${FG_BRIGHT_RED})[ssh]"
-PS1_="${PS1_}${COLOR_RESET}:${FG_BRIGHT_BLUE}%1~${COLOR_RESET}%(!.#.$) "
+PS1='$(vi_mode_info)'"%(!.${FG_BRIGHT_RED}.${FG_BRIGHT_GREEN})%n@%m"
+[[ ! -z "$SSH_CLIENT" ]] && PS1="${PS1}%(!.${FG_BRIGHT_GREEN}.${FG_BRIGHT_RED})[ssh]"
+PS1="${PS1}${COLOR_RESET}:${FG_BRIGHT_BLUE}%1~${COLOR_RESET}%(!.#.$) "
 PS2='> '
 RPROMPT='$(nvm_info)''$(vcs_info_wrapper)'"%(?..${FG_BRIGHT_RED}[%?]${COLOR_RESET} )[%D{%T}]${COLOR_RESET}"
 
-function zle-line-init zle-keymap-select {
-    VIMODE="${${KEYMAP/vicmd/${FG_BRIGHT_RED}[N]}/(main|viins)/${FG_BRIGHT_BLUE}[I]}${COLOR_RESET}"
-    PS1="${VIMODE} ${PS1_}"
+function zle-keymap-select {
     zle reset-prompt
 }
 
-zle -N zle-line-init
 zle -N zle-keymap-select
 
 if installed gdircolors; then
