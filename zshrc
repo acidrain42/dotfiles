@@ -83,7 +83,14 @@ zstyle ':vcs_info:(sv[nk]|bzr):*' branchformat '%b%F{1}:%F{3}%r'
 
 zstyle ':vcs_info:*' enable git svn
 
-# or use pre_cmd, see man zshcontrib
+# Color shortcuts
+for COLOR in BLACK RED GREEN YELLOW BLUE MAGENTA CYAN WHITE; do
+    eval FG_$COLOR='%{$fg_no_bold[${(L)COLOR}]%}'
+    eval FG_BRIGHT_$COLOR='%{$fg_bold[${(L)COLOR}]%}'
+    eval BG_$COLOR='%{$bg[${(L)COLOR}]%}'
+done
+COLOR_RESET="%{$reset_color%}"
+
 vcs_info_wrapper() {
     vcs_info
     if [ -n "$vcs_info_msg_0_" ]; then
@@ -101,17 +108,6 @@ vi_mode_info() {
     echo "${${${KEYMAP:-main}/vicmd/${FG_BRIGHT_RED}[N]}/(main|viins)/${FG_BRIGHT_BLUE}[I]}${COLOR_RESET} "
 }
 
-# make less more friendly for non-text input files, see lesspipe(1)
-[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
-
-# Color shortcuts
-for COLOR in BLACK RED GREEN YELLOW BLUE MAGENTA CYAN WHITE; do
-    eval FG_$COLOR='%{$fg_no_bold[${(L)COLOR}]%}'
-    eval FG_BRIGHT_$COLOR='%{$fg_bold[${(L)COLOR}]%}'
-    eval BG_$COLOR='%{$bg[${(L)COLOR}]%}'
-done
-COLOR_RESET="%{$reset_color%}"
-
 # Prompts
 PS1='$(vi_mode_info)'"%(!.${FG_BRIGHT_RED}.${FG_BRIGHT_GREEN})%n@%m"
 [[ ! -z "$SSH_CLIENT" ]] && PS1="${PS1}%(!.${FG_BRIGHT_GREEN}.${FG_BRIGHT_RED})[ssh]"
@@ -124,6 +120,9 @@ function zle-keymap-select {
 }
 
 zle -N zle-keymap-select
+
+# make less more friendly for non-text input files, see lesspipe(1)
+[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
 
 if installed gdircolors; then
     [ -r ~/.dircolors ] && eval "$(gdircolors -b ~/.dircolors)" || eval "$(gdircolors -b)"
