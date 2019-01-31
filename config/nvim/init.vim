@@ -302,3 +302,6 @@ let g:airline#extensions#branch#enabled = 1
 
 " YouCompleteMe
 let g:ycm_global_ycm_extra_conf = '~/.ycm.conf.py'
+let g:ycm_autoclose_preview_window_after_completion = 1
+map <leader>gf  :YcmCompleter GoToDefinitionElseDeclaration<CR>
+map <leader>gr  :YcmCompleter GoToReferences<CR>
