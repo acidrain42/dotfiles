@@ -45,6 +45,7 @@ GNU_UTILS=(
     'mkdir'
     'readlink'
     'rm'
+    'sed'
     'sha1sum'
     'sha256sum'
     'shred'
