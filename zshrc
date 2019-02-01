@@ -12,12 +12,11 @@ fi
 
 fpath=("$HOME/.local/share/zsh/completions" $fpath)
 
-autoload -U compinit promptinit colors
+autoload -U compinit promptinit
 autoload -Uz vcs_info
 
 compinit -i
 promptinit
-colors
 
 [[ -e $HOME/.tmux.zsh ]] && source $HOME/.tmux.zsh
 
@@ -65,6 +64,10 @@ bindkey "^[[1~" beginning-of-line
 bindkey "^[[4~" end-of-line
 bindkey '^[[3~' delete-char
 
+# Make backspace and ^h work after returning from normal mode
+bindkey '^?' backward-delete-char
+bindkey '^h' backward-delete-char
+
 HISTFILE=~/.zsh_history
 HISTSIZE=5000
 SAVEHIST=5000
@@ -75,21 +78,23 @@ zstyle ':completion:*' special-dirs true
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
 
 # Version Control System
-zstyle ':vcs_info:*' actionformats \
-    '%F{5}[%F{2}%b%F{3}|%F{1}%a%F{5}]%f '
-zstyle ':vcs_info:*' formats       \
-    '%F{5}[%F{2}%b%F{5}]%f '
+zstyle ':vcs_info:*' actionformats '%F{5}[%F{2}%b%F{3}|%F{1}%a%F{5}]%f '
+zstyle ':vcs_info:*' formats '%F{5}[%F{2}%b%F{5}]%f '
 zstyle ':vcs_info:(sv[nk]|bzr):*' branchformat '%b%F{1}:%F{3}%r'
 
 zstyle ':vcs_info:*' enable git svn
 
 # Color shortcuts
-for COLOR in BLACK RED GREEN YELLOW BLUE MAGENTA CYAN WHITE; do
-    eval FG_$COLOR='%{$fg_no_bold[${(L)COLOR}]%}'
-    eval FG_BRIGHT_$COLOR='%{$fg_bold[${(L)COLOR}]%}'
-    eval BG_$COLOR='%{$bg[${(L)COLOR}]%}'
+let idx=0
+let idx_bright=8
+for color in black red green yellow blue magenta cyan white; do
+    eval $color='${idx}'
+    eval bright_$color='${idx_bright}'
+    let idx=idx+1
+    let idx_bright=idx_bright+1
 done
-COLOR_RESET="%{$reset_color%}"
+unset idx idx_bright
+color_reset="%f%k"
 
 vcs_info_wrapper() {
     vcs_info
@@ -105,15 +110,47 @@ nvm_info() {
 }
 
 vi_mode_info() {
-    echo "${${${KEYMAP:-main}/vicmd/${FG_BRIGHT_RED}-NORMAL-}/(main|viins)/${FG_BRIGHT_BLUE}-INSERT-}${COLOR_RESET}"
+    case "${KEYMAP:-main}" in
+        main|viins)
+            echo "%F{${bright_blue}}%F{${black}}%K{${bright_blue}} INSERT "
+            ;;
+        vicmd)
+            echo "%F{${bright_red}}%F{${black}}%K{${bright_red}} NORMAL "
+            ;;
+        *)
+            echo "N/A"
+            ;;
+    esac
 }
 
-# Prompts
-PS1="%(!.${FG_BRIGHT_RED}.${FG_BRIGHT_GREEN})%n@%m"
-[[ ! -z "$SSH_CLIENT" ]] && PS1="${PS1}%(!.${FG_BRIGHT_GREEN}.${FG_BRIGHT_RED})[ssh]"
-PS1="${PS1}${COLOR_RESET}:${FG_BRIGHT_BLUE}%1~${COLOR_RESET}%(!.#.$) "
+build_ps1() {
+    if [[ -n "$SSH_CLIENT" ]]; then
+        c_host="${bright_magenta}"
+    else
+        c_host="${bright_green}"
+    fi
+
+    c_base="${black}"
+    c_dir="${bright_green}"
+    c_success="${bright_green}"
+    c_warn="${bright_yellow}"
+    c_err="${bright_red}"
+
+    #p_exit_code="%(?.%F{${c_success}}✔.%F{${c_err}}✘) "
+    p_exit_code="%(?..%F{${c_err}}✘ )"
+    p_root_warning="%(!.%F{${c_warn}}⚡.)"
+
+    p_host="%F{${c_host}}%n@%m "
+    p_sep1="%K{${c_dir}}%F{${black}} "
+    p_directory="%1~ "
+    p_sep2="%k%F{${c_dir}} "
+
+    echo "%B%K{${c_base}} ${p_exit_code}${p_root_warning}${p_host}${p_sep1}${p_directory}${p_sep2}${color_reset}%b"
+}
+
+PS1="$(build_ps1)"
 PS2='> '
-RPROMPT='$(nvm_info)''$(vcs_info_wrapper)'"%(?..${FG_BRIGHT_RED}[%?]${COLOR_RESET} )"'$(vi_mode_info)'"${COLOR_RESET}"
+RPROMPT='$(nvm_info)$(vcs_info_wrapper)%B$(vi_mode_info)'"${color_reset}%b"
 
 function zle-keymap-select {
     zle reset-prompt
