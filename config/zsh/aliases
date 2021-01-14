@@ -22,65 +22,49 @@ fi
 
 # Renaming aliases
 alias lower='rename '\''y/\ \.A-Z/__a-z/'\'''
-alias rename='perl-rename'
-alias fix-song-title='rename '\''s/_/./'\'''
+alias fix-song-title='rename -s "_" "."'
+
+alias make='make -j4'
 
 alias grep='grep --color=auto'
 alias hd='hexdump -C'
 alias dd='dd status=progress'
 alias rar='unrar'
 alias rf='readlink -f'
-
-if installed handlr; then
-    alias open='handlr open'
-elif installed xdg-open; then
-    alias open='xdg-open'
-elif installed exo-open; then
-    alias open='exo-open'
-fi
 alias f='open .'
 
-if installed paru; then
-    pm() {
-        if [ -n "${VIRTUAL_ENV}" ]; then
-            echo "Can't run paru in venv"
-            return
-        fi
+if installed brew; then
+    alias pm='brew'
+    alias up='brew upgrade && brew cask upgrade'
+fi
 
-        paru "$@"
-    }
-    up() {
-        if [ -n "${VIRTUAL_ENV}" ]; then
-            echo "Can't run paru in venv"
-            return
-        fi
+GNU_UTILS=(
+    'cp'
+    'find'
+    'head'
+    'md5sum'
+    'mkdir'
+    'readlink'
+    'rm'
+    'sed'
+    'sha1sum'
+    'sha256sum'
+    'shred'
+    'tail'
+    'zcat'
+)
 
-        paru -Syu "$@"
-    }
-    compdef pm='paru'
-elif installed yay; then
-    pm() {
-        if [ -n "${VIRTUAL_ENV}" ]; then
-            echo "Can't run yay in venv"
-            return
-        fi
+# Replace utils by their gnu coreutils counterparts
+if installed gls; then
+    if ! installed 'exa'; then
+        alias ls='gls --color=auto -v --group-directories-first'
+    fi
 
-        yay "$@"
-    }
-    up() {
-        if [ -n "${VIRTUAL_ENV}" ]; then
-            echo "Can't run yay in venv"
-            return
-        fi
-
-        yay -Syu "$@"
-    }
-    compdef pm='yay'
-elif installed pacman; then
-    alias up='sudo pacman -Syu'
-    alias pm='pacman'
-elif installed apt; then
-    alias up='sudo apt update && sudo apt full-upgrade'
+    for i in ${GNU_UTILS[@]}; do
+        alias $i="g$i"
+    done
+else
+    alias ls='ls -G'
 fi
 
 if installed nvim; then
@@ -95,6 +79,10 @@ else
 fi
 
 installed bat && alias cat='bat'
+
+if [ -x /Applications/mpv.app/Contents/MacOS/mpv ]; then
+    alias mpv="/Applications/mpv.app/Contents/MacOS/mpv"
+fi
 
 if [ "$TERM" != "xterm" ] && [ "$TERM" != "xterm-256color" ] && [ "$TERM" != "linux" ]; then
     alias ssh='TERM=xterm-256color ssh'

@@ -20,7 +20,7 @@ fpath=("$HOME/.local/share/zsh/compl" $fpath)
 autoload -U compinit promptinit
 autoload -Uz vcs_info
 
-compinit
+compinit -i
 promptinit
 
 [[ -e $HOME/.tmux.zsh ]] && source $HOME/.tmux.zsh
@@ -70,10 +70,13 @@ export KEYTIMEOUT=1
 
 bindkey "^[[A" history-search-backward
 bindkey "^[[B" history-search-forward
-bindkey "^[OA" history-search-backward
-bindkey "^[OB" history-search-forward
 bindkey "^W" backward-kill-word
 bindkey "^R" history-incremental-search-backward
+bindkey "^[[1;5D" backward-word
+bindkey "^[[1;5C" forward-word
+bindkey "^[[1~" beginning-of-line
+bindkey "^[[4~" end-of-line
+bindkey '^[[3~' delete-char
 
 # Make backspace and ^h work after returning from normal mode
 bindkey '^?' backward-delete-char
@@ -100,8 +103,8 @@ ZSH_EXTRA_FILES=(
     "${ZDOTDIR}/aliases"
     "${ZDOTDIR}/functions"
     "${ZDOTDIR}/local"
-    "/usr/bin/virtualenvwrapper_lazy.sh"
-    "/usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
+    "/usr/local/bin/virtualenvwrapper_lazy.sh"
+    "/usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
     "/usr/share/doc/pkgfile/command-not-found.zsh"
 )
 
@@ -126,8 +129,8 @@ done
 # make less more friendly for non-text input files, see lesspipe(1)
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
 
-if installed dircolors; then
-    [ -r ~/.dircolors ] && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
+if installed gdircolors; then
+    [ -r ~/.dircolors ] && eval "$(gdircolors -b ~/.dircolors)" || eval "$(gdircolors -b)"
 fi
 
 # Enable core dumps
@@ -145,6 +148,9 @@ export CFLAGS="-O2 -march=native -fstack-protector-strong"
 
 # Remove / from WORDCHARS, ie. make / a word delimiter
 export WORDCHARS=${WORDCHARS/\//}
+
+# Use Python3 for virtualenvwrapper
+export VIRTUALENVWRAPPER_PYTHON=/usr/local/bin/python3
 
 # Don't prepend virtual env name to PS1
 export VIRTUAL_ENV_DISABLE_PROMPT=1

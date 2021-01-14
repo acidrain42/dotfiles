@@ -37,12 +37,20 @@ APPS=(
     'node'
     'rg'
     'sd'
+    'terminal-notifier'
     'tmux'
-    'xsel'
     'yarn'
 )
 
-DOTFILES_DIR="$(readlink -f "$(dirname "${BASH_SOURCE[0]}")")"
+function get_real_path() {
+    if type greadlink &> /dev/null; then
+        greadlink -f "$0"
+    else
+        perl -e 'use Cwd "abs_path"; print abs_path(shift)' "$1"
+    fi
+}
+
+DOTFILES_DIR="$(get_real_path "$(dirname "${BASH_SOURCE[0]}")")"
 
 unattended=0
 
@@ -72,7 +80,7 @@ function ask_yes_no {
 }
 
 function hash() {
-    md5sum "$1" | cut -d ' ' -f 1
+    md5 -r "$1" | cut -d ' ' -f 1
 }
 
 function create_link() {
@@ -115,10 +123,8 @@ done
 
 if ask_yes_no "Install fonts [y/N]? " "n"; then
     for file in "${DOTFILES_DIR}"/fonts/*; do
-        copy_file "$HOME/.fonts/$(basename "$file")" "$file"
+        copy_file "$HOME/Library/Fonts/$(basename "$file")" "$file"
     done
-
-    fc-cache -f
 fi
 
 for file in "${DOTFILES_DIR}"/usr/bin/*; do
@@ -129,7 +135,9 @@ for file in "${DOTFILES_DIR}"/usr/lib/*; do
     create_link "$HOME/usr/lib/$(basename "$file")" "$file"
 done
 
-find "$HOME/usr" -xtype l -print0 | xargs --no-run-if-empty -0 rm
+if find "$HOME/usr" -xtype l &> /dev/null; then
+    find "$HOME/usr" -xtype l -print0 | xargs -0 rm
+fi
 
 [[ -e "$DOTFILES_DIR/zsh.$(hostname)" ]] && ln -sf "$DOTFILES_DIR/zsh.$(hostname)" "$HOME/.zsh.local"
 
@@ -167,6 +175,15 @@ if installed tmux; then
         git pull
         popd > /dev/null
     fi
+fi
+
+for file in "${DOTFILES_DIR}"/terminfo/*; do
+    tic -x "$file"
+done
+
+if [ "$TERM" = "xterm-256color" ] || [ "$TERM" = "screen-256color" ]; then
+    # https://medium.com/@dubistkomisch/how-to-actually-get-italics-and-true-colour-to-work-in-iterm-tmux-vim-9ebe55ebc2be
+    printf "Don't forget to set xterm-256color-italic in iTerm2 profile\\n"
 fi
 
 if installed cargo; then
