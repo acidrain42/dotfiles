@@ -42,9 +42,10 @@ export ANDROID_EMULATOR_USE_SYSTEM_LIBS=1
 export GOPATH="$HOME/usr/go"
 [[ -d "$GOPATH/bin" ]] && export PATH="$GOPATH/bin:$PATH"
 
-# Rust's cargo path
-export CARGO_HOME="$HOME/usr/cargo"
-[[ -d "$CARGO_HOME/bin" ]] && export PATH="$CARGO_HOME/bin:$PATH"
+# Rust's paths
+export CARGO_HOME="${XDG_DATA_HOME}/cargo"
+export RUSTUP_HOME="${XDG_DATA_HOME}/rustup"
+[[ -d "${CARGO_HOME}/bin" ]] && export PATH="${CARGO_HOME}/bin:${PATH}"
 
 # Poetry
 [[ -d "$HOME/.poetry/bin" ]] && export PATH="$HOME/.poetry/bin:$PATH"
